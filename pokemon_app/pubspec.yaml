@@ -1,0 +1,30 @@
+name: pokemon_app
+description: A new Flutter project.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=2.19.6 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+fonts:
+  - family: Montserrat
+    fonts:
+      - asset: fonts/Montserrat-Regular.ttf
+  - family: OpenSans
+    fonts:
+      - asset: fonts/OpenSans-Regular.ttf
+
+# assets:b 
+# - assets/a_dot_burr.jpeg
+
+flutter:
+  uses-material-design: true
