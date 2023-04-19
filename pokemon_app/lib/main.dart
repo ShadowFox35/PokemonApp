@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_app/features/pokemon_info/view/pokemon_info_screen.dart';
+import 'package:pokemon_app/features/pokemon_info/pokemon_details_export.dart';
 import 'package:pokemon_app/features/pokemons/pokemons_export.dart';
-import 'package:pokemon_app/features/welcome_screen/view/view.dart';
+import 'package:pokemon_app/features/welcome_screen/welcome_export.dart';
 
 void main() {
   runApp(const PokemonApp());

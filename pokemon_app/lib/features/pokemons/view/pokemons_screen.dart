@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/pokemons_list.dart';
 
 class Pokemons extends StatefulWidget {
   const Pokemons({super.key});
@@ -7,29 +8,19 @@ class Pokemons extends StatefulWidget {
   State<Pokemons> createState() => _PokemonsState();
 }
 
+
 class _PokemonsState extends State<Pokemons> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pokemons List'),
-      ),
-      body: PageView.builder(
-        itemBuilder: (context, pageIndex) {
-          return ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text('Page $pageIndex, Item $index'),
-                onTap: () {
-                  Navigator.of(context).pushNamed('/pokemon_info');
-                },
-              );
-            },
-          );
-        },
-        itemCount: 3,
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('Pokemons List'),
+        ),
+        body: const Center(
+            child: SizedBox(
+          width: 300,
+          height: 200,
+          child: PokemonsList(),
+        )));
   }
 }

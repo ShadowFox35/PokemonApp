@@ -27,7 +27,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               const SizedBox(height: 16.0),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Navigator.of(context).pushNamed('/pokemons');
                 },
                 child: SvgPicture.asset(
@@ -46,5 +46,3 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ));
   }
 }
-
-
