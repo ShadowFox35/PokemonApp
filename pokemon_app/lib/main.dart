@@ -24,8 +24,20 @@ class PokemonApp extends StatelessWidget {
       routes: {
         '/': (context) => const WelcomeScreen(),
         '/pokemons': (context) => const Pokemons(),
-        '/pokemon_info': (context) => const PokemonInfo(),
       },
+      onGenerateRoute: (settings) {
+        if (settings.name?.startsWith('/pokemon_info/') == true) {
+          final String? name = settings.name?.replaceAll('/pokemon_info/', '');
+          return MaterialPageRoute(
+            builder: (context) => PokemonInfo(name: name),
+          );
+        }
+        return null;
+      },
+      // onUnknownRoute: (settings) {
+      //   // Обработка неизвестного маршрута
+      //   return MaterialPageRoute(builder: (context) => UnknownScreen());
+      // },
     );
   }
 }

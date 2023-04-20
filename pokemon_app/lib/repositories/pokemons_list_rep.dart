@@ -18,3 +18,20 @@ class PokemonsListRep {
     }
   }
 }
+
+class PokemonsInfoRep {
+  Future<PokemonInfoModel> getPokemonsInfo(name) async {
+    try {
+      final response = await Dio().get('https://pokeapi.co/api/v2/pokemon/$name');
+
+      if (response.statusCode == 200) {
+        final pokemonRequestModel = PokemonInfoModel.fromJson(response.data);
+        return pokemonRequestModel;
+      } else {
+        throw Exception('Failed to get pokemon info');
+      }
+    } catch (error) {
+      throw Exception('Failed to get pokemon info: $error');
+    }
+  }
+}

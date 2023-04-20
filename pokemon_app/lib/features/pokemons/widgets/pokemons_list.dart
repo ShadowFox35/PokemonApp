@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/features/pokemon_info/pokemon_details_export.dart';
 import 'package:pokemon_app/repositories/models/pokemons_list_model.dart';
 import 'package:pokemon_app/repositories/pokemons_list_rep.dart';
-
 
 class PokemonsList extends StatefulWidget {
   const PokemonsList({
@@ -82,7 +82,15 @@ class _PokemonsListState extends State<PokemonsList> {
                                 child: Text('${pokemon.name} ${pokemon.url}')),
                             onTap: () {
                               _fetchPokemonList(pageIndex + itemsPerPage);
-                              Navigator.of(context).pushNamed('/pokemon_info');
+                              Navigator.of(context)
+                                  .pushNamed('/pokemon_info/${pokemon.name}');
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => PokemonInfo(
+                                    name: pokemon.name,
+                                  ), // Передача id
+                                ),
+                              );
                             },
                           ));
                     },
@@ -91,10 +99,8 @@ class _PokemonsListState extends State<PokemonsList> {
         itemCount: pagesAmount,
       )),
       PaginationButtons(
-        onNextPressed:
-            _loadNextPage, // Передача callback функции для кнопки "Next"
-        onPreviousPressed:
-            _loadPreviousPage, // Передача callback функции для кнопки "Previous"
+        onNextPressed: _loadNextPage, //  callback для кнопки "Next"
+        onPreviousPressed: _loadPreviousPage, //  callback для кнопки "Previous"
       ),
     ]);
   }
@@ -104,7 +110,8 @@ class PaginationButtons extends StatelessWidget {
   final VoidCallback? onNextPressed;
   final VoidCallback? onPreviousPressed;
 
-  PaginationButtons({this.onNextPressed, this.onPreviousPressed});
+  const PaginationButtons(
+      {super.key, this.onNextPressed, this.onPreviousPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -113,11 +120,11 @@ class PaginationButtons extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: onPreviousPressed,
-          child: Text('Previous'),
+          child: const Text('Previous'),
         ),
         ElevatedButton(
           onPressed: onNextPressed,
-          child: Text('Next'),
+          child: const Text('Next'),
         ),
       ],
     );
