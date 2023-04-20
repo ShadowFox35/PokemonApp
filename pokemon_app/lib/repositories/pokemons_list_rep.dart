@@ -1,18 +1,6 @@
 import 'package:dio/dio.dart';
 import 'models/pokemons_list_model.dart';
 
-// class PokemonsListRep {
-//   Future<List<PokemonsListModel>> getPokemonsList() async {
-//     final response = await Dio().get('https://pokeapi.co/api/v2/pokemon');
-//     // final data = response.data.value as Map<String, dynamic>;
-//     // final dataList =
-//     //     data.entries.map((e) => PokemonsListModel(name: e.value)).toList();
-//     // return dataList;
-//     // // debugPrint(response.data);
-//     return response.data;
-//   }
-// }
-
 class PokemonsListRep {
   Future<List<PokemonListModel>> getPokemonsList() async {
     try {

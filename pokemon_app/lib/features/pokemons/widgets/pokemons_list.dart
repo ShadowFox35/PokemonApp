@@ -38,8 +38,8 @@ class _PokemonsListState extends State<PokemonsList> {
         return Align(
             alignment: Alignment.center,
             child: SizedBox(
-                width: 200,
-                height: 200,
+                width: 250,
+                height: 250,
                 child: ListView.builder(
                   itemCount: itemsPerPage,
                   // index - номер покемона на странице
@@ -47,10 +47,11 @@ class _PokemonsListState extends State<PokemonsList> {
                     final pokemon =
                         pokemonList[index + pageIndex * itemsPerPage];
                     return SizedBox(
-                        height: 30,
+                        height: 35,
                         child: ListTile(
-                          title:
-                              SizedBox(height: 20, child: Text(pokemon.name)),
+                          title: SizedBox(
+                              height: 25,
+                              child: Text('${pokemon.name} ${pokemon.url}')),
                           onTap: () {
                             Navigator.of(context).pushNamed('/pokemon_info');
                           },
