@@ -8,7 +8,6 @@ class Pokemons extends StatefulWidget {
   State<Pokemons> createState() => _PokemonsState();
 }
 
-
 class _PokemonsState extends State<Pokemons> {
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class _PokemonsState extends State<Pokemons> {
         body: const Center(
             child: SizedBox(
           width: 300,
-          height: 200,
+          height: 500,
           child: PokemonsList(),
         )));
   }

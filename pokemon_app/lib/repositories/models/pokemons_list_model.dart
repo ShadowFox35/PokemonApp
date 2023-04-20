@@ -1,13 +1,3 @@
-// class PokemonListModel {
-//   final String name;
-
-//   PokemonListModel({required this.name});
-
-//   factory PokemonListModel.fromJson(Map<String, dynamic> json) {
-//     return PokemonListModel(name: json['name']);
-//   }
-// }
-
 class PokemonListModel {
   final String name;
   final String url;
@@ -18,6 +8,27 @@ class PokemonListModel {
     return PokemonListModel(
       name: json['name'],
       url: json['url'],
+    );
+  }
+}
+
+class PokemonRequestModel {
+  int count;
+  String? next;
+  String? previous;
+  List<PokemonListModel> results;
+
+  PokemonRequestModel(
+      {required this.count, this.next, this.previous, required this.results});
+
+  factory PokemonRequestModel.fromJson(Map<String, dynamic> json) {
+    return PokemonRequestModel(
+      count: json['count'],
+      next: json['next'],
+      previous: json['previous'],
+      results: (json['results'] as List<dynamic>)
+          .map((pokemonJson) => PokemonListModel.fromJson(pokemonJson))
+          .toList(),
     );
   }
 }
