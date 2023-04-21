@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:pokemon_app/features/pokemon_info/pokemon_details_export.dart';
+import 'package:pokemon_app/features/pokemons/widgets/widgets.dart';
 import 'package:pokemon_app/repositories/models/pokemons_list_model.dart';
 import 'package:pokemon_app/repositories/pokemons_list_rep.dart';
 
@@ -104,46 +105,11 @@ class _PokemonsListState extends State<PokemonsList> {
         )),
         PaginationButtons(
           onNextPressed: _loadNextPage, //  callback для кнопки "Next"
-          onPreviousPressed:
-              _loadPreviousPage, //  callback для кнопки "Previous"
+          onPreviousPressed: _loadPreviousPage,
+          pagesAmount: pagesAmount,
+          currentPage: page + 1, //  callback для кнопки "Previous"
         ),
       ]);
     }
-  }
-}
-
-class PaginationButtons extends StatelessWidget {
-  final VoidCallback? onNextPressed;
-  final VoidCallback? onPreviousPressed;
-
-  const PaginationButtons({
-    super.key,
-    this.onNextPressed,
-    this.onPreviousPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: onPreviousPressed,
-          child: SvgPicture.asset(
-            'assets/icons/prev.svg',
-            width: 50,
-            height: 50,
-          ),
-        ),
-        GestureDetector(
-          onTap: onNextPressed,
-          child: SvgPicture.asset(
-            'assets/icons/next.svg',
-            width: 50,
-            height: 50,
-          ),
-        ),
-      ],
-    );
   }
 }
