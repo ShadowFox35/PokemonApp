@@ -33,18 +33,17 @@ class _InfoState extends State<PokemonInfo> {
 
   @override
   Widget build(BuildContext context) {
-    if (pokemonInfo == null) {
-      return const CircularProgressIndicator(); // Или другой виджет загрузки
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          title: Text(pokemonInfo!.name),
-        ),
-        body: bodyWidget(context),
-      );
-    }
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        title: Text(widget.name!),
+      ),
+      body: pokemonInfo == null ? loaderWidget(context) : bodyWidget(context),
+    );
   }
+
+  loaderWidget(BuildContext context) =>
+      const Center(child: CircularProgressIndicator());
 
   bodyWidget(BuildContext context) => Stack(
         children: <Widget>[
