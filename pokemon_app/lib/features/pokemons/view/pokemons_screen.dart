@@ -13,7 +13,8 @@ class _PokemonsState extends State<Pokemons> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Pokemons List'),
+          title: Text('Pokemons List',
+              style: Theme.of(context).textTheme.headlineMedium),
         ),
         body: const Center(
             child: SizedBox(

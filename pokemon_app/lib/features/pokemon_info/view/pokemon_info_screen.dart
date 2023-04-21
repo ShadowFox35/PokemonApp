@@ -36,7 +36,8 @@ class _InfoState extends State<PokemonInfo> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text(widget.name!),
+        title: Text(widget.name!,
+            style: Theme.of(context).textTheme.headlineMedium),
       ),
       body: pokemonInfo == null ? loaderWidget(context) : bodyWidget(context),
     );
@@ -72,14 +73,15 @@ class _InfoState extends State<PokemonInfo> {
                       )),
                   Text(
                     pokemonInfo!.name,
-                    style: const TextStyle(
-                        fontSize: 25.0, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  Text("Height: ${pokemonInfo!.height}"),
-                  Text("Weight: ${pokemonInfo!.weight}"),
+                  Text("Height: ${pokemonInfo!.height}",
+                      style: Theme.of(context).textTheme.bodySmall),
+                  Text("Weight: ${pokemonInfo!.weight}",
+                      style: Theme.of(context).textTheme.bodySmall),
                   Text(
                     "Types: ${pokemonInfo!.types.join(', ')}",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),

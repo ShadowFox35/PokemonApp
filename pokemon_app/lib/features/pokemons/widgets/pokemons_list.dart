@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pokemon_app/features/pokemon_info/pokemon_details_export.dart';
 import 'package:pokemon_app/repositories/models/pokemons_list_model.dart';
 import 'package:pokemon_app/repositories/pokemons_list_rep.dart';
@@ -73,7 +74,6 @@ class _PokemonsListState extends State<PokemonsList> {
                     height: 500,
                     child: ListView.builder(
                       itemCount: itemsPerPage,
-                      // index - номер покемона на странице
                       itemBuilder: (context, index) {
                         final pokemon =
                             pokemonList[index + pageIndex * itemsPerPage];
@@ -82,15 +82,17 @@ class _PokemonsListState extends State<PokemonsList> {
                             child: ListTile(
                               title: SizedBox(
                                   height: 50,
-                                  child:
-                                      Text('${pokemon.name} ${pokemon.url}')),
+                                  child: Text(pokemon.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium)),
                               onTap: () {
                                 _fetchPokemonList(pageIndex + itemsPerPage);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => PokemonInfo(
                                       name: pokemon.name,
-                                    ), // Передача id
+                                    ),
                                   ),
                                 );
                               },
@@ -114,21 +116,32 @@ class PaginationButtons extends StatelessWidget {
   final VoidCallback? onNextPressed;
   final VoidCallback? onPreviousPressed;
 
-  const PaginationButtons(
-      {super.key, this.onNextPressed, this.onPreviousPressed});
+  const PaginationButtons({
+    super.key,
+    this.onNextPressed,
+    this.onPreviousPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ElevatedButton(
-          onPressed: onPreviousPressed,
-          child: const Text('Previous'),
+        GestureDetector(
+          onTap: onPreviousPressed,
+          child: SvgPicture.asset(
+            'assets/icons/prev.svg',
+            width: 50,
+            height: 50,
+          ),
         ),
-        ElevatedButton(
-          onPressed: onNextPressed,
-          child: const Text('Next'),
+        GestureDetector(
+          onTap: onNextPressed,
+          child: SvgPicture.asset(
+            'assets/icons/next.svg',
+            width: 50,
+            height: 50,
+          ),
         ),
       ],
     );
