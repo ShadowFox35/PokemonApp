@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pokemon_app/features/pokemon_info/pokemon_details_export.dart';
+import 'package:pokemon_app/features/pokemons/bloc/pokemons_list_bloc.dart';
 import 'package:pokemon_app/features/pokemons/widgets/widgets.dart';
 import 'package:pokemon_app/repositories/pokemons_rep_export.dart';
 
@@ -20,45 +22,40 @@ class _PokemonsListState extends State<PokemonsList> {
   bool isLoading = false;
   static const itemsPerPage = 10;
 
+  final _pokemonsListBloc = PokemonsListBloc(
+    GetIt.I<AbstractPokemonsListRep>(),
+  );
+
   @override
   void initState() {
     super.initState();
-    _fetchPokemonList(0);
+    // _fetchPokemonList(0);
+    _pokemonsListBloc.add(LoadPokemonsList(0, []));
   }
 
-  Future<bool> _fetchPokemonList(offset) async {
-    final PokemonRequestModel fetchedPokemonList =
-        await GetIt.I<AbstractPokemonsListRep>().getPokemonsList(offset);
-
-    setState(() {
-      // pokemonList = fetchedPokemonList.results;
-      pokemonList.addAll(fetchedPokemonList.results);
-      if (fetchedPokemonList.count != pokemonCount) {
-        pokemonCount = fetchedPokemonList.count;
-      }
-    });
+  Future<bool> _fetchPokemonList(offset, list) async {
+    _pokemonsListBloc.add(LoadPokemonsList(offset, list));
+    setState(() {});
     return true;
   }
 
-  void _loadNextPage() {
+  void _loadNextPage(list, pokemonCount) {
     int nextPage = page + 1;
-    if (nextPage < (pokemonList.length / itemsPerPage).ceil()) {
+    if (nextPage < (list.length / itemsPerPage).ceil()) {
       setState(() {
         page = nextPage;
       });
     } else if (nextPage < (pokemonCount / itemsPerPage).ceil()) {
       setState(() {
-        isLoading =
-            true; // Устанавливаем флаг загрузки в true перед началом загрузки
+        isLoading = true;
       });
-      _fetchPokemonList(nextPage * itemsPerPage).then((_) {
-        // После завершения запроса
-        setState(() {
-          page = nextPage;
-          isLoading =
-              false; // Устанавливаем флаг загрузки в false после завершения загрузки
-        });
+
+      _pokemonsListBloc.add(LoadPokemonsList(nextPage * itemsPerPage, list));
+      setState(() {
+        page = nextPage;
+        isLoading = false;
       });
+      // });
     }
   }
 
@@ -73,60 +70,74 @@ class _PokemonsListState extends State<PokemonsList> {
 
   @override
   Widget build(BuildContext context) {
-    final pagesAmount = (pokemonCount / itemsPerPage).ceil();
+    return BlocBuilder<PokemonsListBloc, PokemonsListState>(
+      bloc: _pokemonsListBloc,
+      builder: (context, state) {
+        if (state is PokemonsListLoaded) {
+          final pagesAmount =
+              (state.pokemonsListLoaded.count / itemsPerPage).ceil();
+          final pokemonListInfo = state.pokemonsListLoaded;
+          return Column(children: [
+            Expanded(
+                child: PageView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, pageIndex) {
+                return Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                        width: 300,
+                        height: 500,
+                        child: ListView.builder(
+                          itemCount: itemsPerPage,
+                          itemBuilder: (context, index) {
+                            final pokemon = state.pokemonsListLoaded
+                                .results[index + page * itemsPerPage];
 
-    if (pokemonList.isEmpty || isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    } else {
-      return Column(children: [
-        Expanded(
-            child: PageView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, pageIndex) {
-            return Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                    width: 300,
-                    height: 500,
-                    child: ListView.builder(
-                      itemCount: itemsPerPage,
-                      itemBuilder: (context, index) {
-                        final pokemon =
-                            pokemonList[index + page * itemsPerPage];
-
-                        return SizedBox(
-                            height: 40,
-                            child: ListTile(
-                              title: SizedBox(
-                                  height: 50,
-                                  child: Center(
-                                    child: Text(pokemon.name,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium),
-                                  )),
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => PokemonInfo(
-                                      name: pokemon.name,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ));
-                      },
-                    )));
-          },
-          itemCount: pagesAmount,
-        )),
-        PaginationButtons(
-          onNextPressed: _loadNextPage, //  callback для кнопки "Next"
-          onPreviousPressed: _loadPreviousPage,
-          pagesAmount: pagesAmount,
-          currentPage: page + 1, //  callback для кнопки "Previous"
-        ),
-      ]);
-    }
+                            return SizedBox(
+                                height: 40,
+                                child: ListTile(
+                                  title: SizedBox(
+                                      height: 50,
+                                      child: Center(
+                                        child: Text(pokemon.name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium),
+                                      )),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => PokemonInfo(
+                                          name: pokemon.name,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ));
+                          },
+                        )));
+              },
+              itemCount: pagesAmount,
+            )),
+            PaginationButtons(
+              onNextPressed: () => _loadNextPage(pokemonListInfo.results,
+                  pokemonListInfo.count), //  callback для кнопки "Next"
+              onPreviousPressed: _loadPreviousPage,
+              pagesAmount: pagesAmount,
+              currentPage: page + 1, //  callback для кнопки "Previous"
+            ),
+          ]);
+        }
+        if (state is PokemonsListFailure) {
+          return Center(
+            child: Text(
+              'Failed to get pokemons list. Please, check your internet connection.',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          );
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 }
