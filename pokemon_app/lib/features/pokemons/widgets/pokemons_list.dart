@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:get_it/get_it.dart';
 import 'package:pokemon_app/features/pokemon_info/pokemon_details_export.dart';
 import 'package:pokemon_app/features/pokemons/widgets/widgets.dart';
-import 'package:pokemon_app/repositories/models/pokemons_list_model.dart';
-import 'package:pokemon_app/repositories/pokemons_list_rep.dart';
+import 'package:pokemon_app/repositories/pokemons_rep_export.dart';
 
 class PokemonsList extends StatefulWidget {
   const PokemonsList({
@@ -29,7 +28,7 @@ class _PokemonsListState extends State<PokemonsList> {
 
   Future<bool> _fetchPokemonList(offset) async {
     final PokemonRequestModel fetchedPokemonList =
-        await PokemonsListRep().getPokemonsList(offset);
+        await GetIt.I<AbstractPokemonsListRep>().getPokemonsList(offset);
 
     setState(() {
       // pokemonList = fetchedPokemonList.results;

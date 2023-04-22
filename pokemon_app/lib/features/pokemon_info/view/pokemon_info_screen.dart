@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_app/repositories/models/pokemons_list_model.dart';
-import 'package:pokemon_app/repositories/pokemons_list_rep.dart';
+import 'package:get_it/get_it.dart';
+import 'package:pokemon_app/repositories/pokemons_rep_export.dart';
 
 class PokemonInfo extends StatefulWidget {
   final String? name;
@@ -22,7 +22,8 @@ class _InfoState extends State<PokemonInfo> {
 
   Future<void> _getPokemonInfo(String name) async {
     try {
-      final response = await PokemonsInfoRep().getPokemonsInfo(name);
+      final response =
+          await GetIt.I<AbstractPokemonsInfoRep>().getPokemonsInfo(name);
       setState(() {
         pokemonInfo = response;
       });

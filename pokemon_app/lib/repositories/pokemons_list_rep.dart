@@ -1,10 +1,15 @@
 import 'package:dio/dio.dart';
-import 'models/pokemons_list_model.dart';
+import 'models/models_export.dart';
+import 'abstract_pokemons_list_rep.dart';
 
-class PokemonsListRep {
+class PokemonsListRep implements AbstractPokemonsListRep {
+  PokemonsListRep({required this.dio});
+  final Dio dio;
+
+  @override
   Future<PokemonRequestModel> getPokemonsList(offset) async {
     try {
-      final response = await Dio()
+      final response = await dio
           .get('https://pokeapi.co/api/v2/pokemon?offset=$offset&limit=10');
 
       if (response.statusCode == 200) {
@@ -19,10 +24,14 @@ class PokemonsListRep {
   }
 }
 
-class PokemonsInfoRep {
+class PokemonsInfoRep implements AbstractPokemonsInfoRep {
+  PokemonsInfoRep({required this.dio});
+  final Dio dio;
+
+  @override
   Future<PokemonInfoModel> getPokemonsInfo(name) async {
     try {
-      final response = await Dio().get('https://pokeapi.co/api/v2/pokemon/$name');
+      final response = await dio.get('https://pokeapi.co/api/v2/pokemon/$name');
 
       if (response.statusCode == 200) {
         final pokemonRequestModel = PokemonInfoModel.fromJson(response.data);
