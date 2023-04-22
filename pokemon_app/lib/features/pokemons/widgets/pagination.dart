@@ -22,9 +22,8 @@ class PaginationButtons extends StatelessWidget {
 
     ColorFilter? disabledPrevBtnFilter = currentPage == 1 ? clearFilter : null;
 
-    ColorFilter? disabledNextBtnFilter = currentPage == pagesAmount
-        ? clearFilter
-        : null; // Создаем ColorFilter с нужным цветом
+    ColorFilter? disabledNextBtnFilter =
+        currentPage == pagesAmount ? clearFilter : null;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

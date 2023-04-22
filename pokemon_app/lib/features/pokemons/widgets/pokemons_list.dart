@@ -18,31 +18,47 @@ class _PokemonsListState extends State<PokemonsList> {
   List<PokemonListModel> pokemonList = [];
   int pokemonCount = 0;
   int page = 0;
+  bool isLoading = false;
   static const itemsPerPage = 10;
+
   @override
   void initState() {
     super.initState();
     _fetchPokemonList(0);
   }
 
-  void _fetchPokemonList(offset) async {
+  Future<bool> _fetchPokemonList(offset) async {
     final PokemonRequestModel fetchedPokemonList =
         await PokemonsListRep().getPokemonsList(offset);
 
     setState(() {
-      pokemonList = fetchedPokemonList.results;
+      // pokemonList = fetchedPokemonList.results;
+      pokemonList.addAll(fetchedPokemonList.results);
       if (fetchedPokemonList.count != pokemonCount) {
         pokemonCount = fetchedPokemonList.count;
       }
     });
+    return true;
   }
 
   void _loadNextPage() {
     int nextPage = page + 1;
-    if (nextPage < (pokemonCount / itemsPerPage).ceil()) {
-      _fetchPokemonList(nextPage * itemsPerPage);
+    if (nextPage < (pokemonList.length / itemsPerPage).ceil()) {
       setState(() {
         page = nextPage;
+      });
+    } else if (nextPage < (pokemonCount / itemsPerPage).ceil()) {
+      setState(() {
+        isLoading =
+            true; // Устанавливаем флаг загрузки в true перед началом загрузки
+      });
+      _fetchPokemonList(nextPage * itemsPerPage).then((_) {
+        // После завершения запроса
+        setState(() {
+          page = nextPage;
+          isLoading =
+              false; // Устанавливаем флаг загрузки в false после завершения загрузки
+        });
       });
     }
   }
@@ -50,7 +66,6 @@ class _PokemonsListState extends State<PokemonsList> {
   void _loadPreviousPage() {
     int previousPage = page - 1;
     if (previousPage >= 0) {
-      _fetchPokemonList(previousPage * itemsPerPage);
       setState(() {
         page = previousPage;
       });
@@ -61,12 +76,13 @@ class _PokemonsListState extends State<PokemonsList> {
   Widget build(BuildContext context) {
     final pagesAmount = (pokemonCount / itemsPerPage).ceil();
 
-    if (pokemonList.isEmpty) {
+    if (pokemonList.isEmpty || isLoading) {
       return const Center(child: CircularProgressIndicator());
     } else {
       return Column(children: [
         Expanded(
             child: PageView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, pageIndex) {
             return Align(
                 alignment: Alignment.center,
@@ -77,18 +93,20 @@ class _PokemonsListState extends State<PokemonsList> {
                       itemCount: itemsPerPage,
                       itemBuilder: (context, index) {
                         final pokemon =
-                            pokemonList[index + pageIndex * itemsPerPage];
+                            pokemonList[index + page * itemsPerPage];
+
                         return SizedBox(
                             height: 40,
                             child: ListTile(
                               title: SizedBox(
                                   height: 50,
-                                  child: Text(pokemon.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium)),
+                                  child: Center(
+                                    child: Text(pokemon.name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium),
+                                  )),
                               onTap: () {
-                                _fetchPokemonList(pageIndex + itemsPerPage);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => PokemonInfo(
