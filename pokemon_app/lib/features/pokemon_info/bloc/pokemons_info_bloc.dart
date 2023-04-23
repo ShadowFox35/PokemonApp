@@ -12,15 +12,12 @@ class PokemonsInfoBloc extends Bloc<PokemonsInfoEvent, PokemonsInfoState> {
       emit,
     ) async {
       try {
-        final infoLoaded =
-          await pokemonsInfoRep.getPokemonsInfo(event.name);
-          emit (PokemonsInfoLoaded(pokemonsInfoLoaded: infoLoaded));
-      } catch (error) {
-        emit (PokemonsInfoFailure(failure: error));
+        final infoLoaded = await pokemonsInfoRep.getPokemonsInfo(event.name);
+        emit(PokemonsInfoLoaded(pokemonsInfoLoaded: infoLoaded));
+      } on Exception catch (error) {
+        emit(PokemonsInfoFailure(failure: error));
       }
     });
   }
   final AbstractPokemonsInfoRep pokemonsInfoRep;
 }
-
-

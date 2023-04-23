@@ -17,5 +17,5 @@ class PokemonsListLoaded extends PokemonsListState {
 class PokemonsListFailure extends PokemonsListState {
   PokemonsListFailure({required this.failure});
   
-  final Object? failure;
+  final Exception? failure;
 }

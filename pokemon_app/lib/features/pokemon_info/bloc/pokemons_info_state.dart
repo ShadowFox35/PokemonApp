@@ -17,5 +17,5 @@ class PokemonsInfoLoaded extends PokemonsInfoState {
 class PokemonsInfoFailure extends PokemonsInfoState {
   PokemonsInfoFailure({required this.failure});
   
-  final Object? failure;
+  final Exception? failure;
 }

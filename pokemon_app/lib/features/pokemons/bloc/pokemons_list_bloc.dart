@@ -12,6 +12,7 @@ class PokemonsListBloc extends Bloc<PokemonsListEvent, PokemonsListState> {
     ) async {
       try {
         emit(PokemonsListLoading());
+        // final pokemonsListRep = PokemonsListRep(dio: Dio());
 
         final fetchedPokemonList =
             await pokemonsListRep.getPokemonsList(event.offset);
@@ -21,9 +22,8 @@ class PokemonsListBloc extends Bloc<PokemonsListEvent, PokemonsListState> {
         ];
 
         emit(PokemonsListLoaded(pokemonsListLoaded: fetchedPokemonList));
-      } catch (error) {
+      } on Exception catch (error) {
         emit(PokemonsListFailure(failure: error));
-        emit(PokemonsListLoading());
       }
     });
   }
