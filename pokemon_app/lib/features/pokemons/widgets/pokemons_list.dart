@@ -29,15 +29,14 @@ class _PokemonsListState extends State<PokemonsList> {
   @override
   void initState() {
     super.initState();
-    // _fetchPokemonList(0);
     _pokemonsListBloc.add(LoadPokemonsList(0, []));
   }
 
-  Future<bool> _fetchPokemonList(offset, list) async {
-    _pokemonsListBloc.add(LoadPokemonsList(offset, list));
-    setState(() {});
-    return true;
-  }
+  // Future<bool> _fetchPokemonList(offset, list) async {
+  //   _pokemonsListBloc.add(LoadPokemonsList(offset, list));
+  //   setState(() {});
+  //   return true;
+  // }
 
   void _loadNextPage(list, pokemonCount) {
     int nextPage = page + 1;
@@ -55,7 +54,6 @@ class _PokemonsListState extends State<PokemonsList> {
         page = nextPage;
         isLoading = false;
       });
-      // });
     }
   }
 
@@ -79,46 +77,47 @@ class _PokemonsListState extends State<PokemonsList> {
           final pokemonListInfo = state.pokemonsListLoaded;
           return Column(children: [
             Expanded(
-                child: PageView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, pageIndex) {
-                return Align(
+              child: PageView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, pageIndex) {
+                  return Align(
                     alignment: Alignment.center,
                     child: SizedBox(
-                        width: 300,
-                        height: 500,
-                        child: ListView.builder(
-                          itemCount: itemsPerPage,
-                          itemBuilder: (context, index) {
-                            final pokemon = state.pokemonsListLoaded
-                                .results[index + page * itemsPerPage];
+                      width: 300,
+                      height: 500,
+                      child: ListView.builder(
+                        itemCount: itemsPerPage,
+                        itemBuilder: (context, index) {
+                          final pokemon = state.pokemonsListLoaded
+                              .results[index + page * itemsPerPage];
 
-                            return SizedBox(
-                                height: 40,
-                                child: ListTile(
-                                  title: SizedBox(
-                                      height: 50,
-                                      child: Center(
-                                        child: Text(pokemon.name,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium),
-                                      )),
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => PokemonInfo(
-                                          name: pokemon.name,
-                                        ),
+                          return SizedBox(
+                              height: 40,
+                              child: ListTile(
+                                title: Center(
+                                  child: Text(pokemon.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium),
+                                ),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => PokemonInfo(
+                                        name: pokemon.name,
                                       ),
-                                    );
-                                  },
-                                ));
-                          },
-                        )));
-              },
-              itemCount: pagesAmount,
-            )),
+                                    ),
+                                  );
+                                },
+                              ));
+                        },
+                      ),
+                    ),
+                  );
+                },
+                itemCount: pagesAmount,
+              ),
+            ),
             PaginationButtons(
               onNextPressed: () => _loadNextPage(pokemonListInfo.results,
                   pokemonListInfo.count), //  callback для кнопки "Next"
