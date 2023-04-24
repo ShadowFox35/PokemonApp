@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/pokemons_list.dart';
+import '../widgets/widgets.dart';
+
 
 class Pokemons extends StatefulWidget {
   const Pokemons({super.key});

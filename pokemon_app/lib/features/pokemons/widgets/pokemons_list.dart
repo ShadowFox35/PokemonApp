@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pokemon_app/features/pokemon_info/pokemon_details_export.dart';
+import 'package:pokemon_app/features/pokemon_info/pokemon_info_export.dart';
 import 'package:pokemon_app/features/pokemons/bloc/pokemons_list_bloc.dart';
 import 'package:pokemon_app/features/pokemons/widgets/widgets.dart';
 import 'package:pokemon_app/repositories/pokemons_rep_export.dart';
