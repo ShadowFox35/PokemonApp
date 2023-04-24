@@ -6,6 +6,7 @@ import 'package:pokemon_app/features/pokemons/bloc/pokemons_list_bloc.dart';
 import 'package:pokemon_app/features/pokemons/widgets/widgets.dart';
 import 'package:pokemon_app/repositories/pokemons_rep_export.dart';
 
+
 class PokemonsList extends StatefulWidget {
   const PokemonsList({
     super.key,
@@ -16,10 +17,7 @@ class PokemonsList extends StatefulWidget {
 }
 
 class _PokemonsListState extends State<PokemonsList> {
-  List<PokemonListModel> pokemonList = [];
-  int pokemonCount = 0;
   int page = 0;
-  bool isLoading = false;
   static const itemsPerPage = 10;
 
   final _pokemonsListBloc = PokemonsListBloc(
@@ -32,11 +30,11 @@ class _PokemonsListState extends State<PokemonsList> {
     _pokemonsListBloc.add(LoadPokemonsList(0, []));
   }
 
-  // Future<bool> _fetchPokemonList(offset, list) async {
-  //   _pokemonsListBloc.add(LoadPokemonsList(offset, list));
-  //   setState(() {});
-  //   return true;
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    _pokemonsListBloc.close();
+  }
 
   void _loadNextPage(list, pokemonCount) {
     int nextPage = page + 1;
@@ -45,14 +43,9 @@ class _PokemonsListState extends State<PokemonsList> {
         page = nextPage;
       });
     } else if (nextPage < (pokemonCount / itemsPerPage).ceil()) {
-      setState(() {
-        isLoading = true;
-      });
-
       _pokemonsListBloc.add(LoadPokemonsList(nextPage * itemsPerPage, list));
       setState(() {
         page = nextPage;
-        isLoading = false;
       });
     }
   }
@@ -92,24 +85,24 @@ class _PokemonsListState extends State<PokemonsList> {
                               .results[index + page * itemsPerPage];
 
                           return SizedBox(
-                              height: 40,
-                              child: ListTile(
-                                title: Center(
-                                  child: Text(pokemon.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium),
-                                ),
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => PokemonInfo(
-                                        name: pokemon.name,
-                                      ),
+                            height: 40,
+                            child: ListTile(
+                              title: Center(
+                                child: Text(pokemon.name,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                              ),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => PokemonInfo(
+                                      name: pokemon.name,
                                     ),
-                                  );
-                                },
-                              ));
+                                  ),
+                                );
+                              },
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -119,24 +112,35 @@ class _PokemonsListState extends State<PokemonsList> {
               ),
             ),
             PaginationButtons(
-              onNextPressed: () => _loadNextPage(pokemonListInfo.results,
-                  pokemonListInfo.count), //  callback для кнопки "Next"
+              onNextPressed: () =>
+                  _loadNextPage(pokemonListInfo.results, pokemonListInfo.count),
               onPreviousPressed: _loadPreviousPage,
               pagesAmount: pagesAmount,
-              currentPage: page + 1, //  callback для кнопки "Previous"
+              currentPage: page + 1,
             ),
           ]);
         }
         if (state is PokemonsListFailure) {
-          return Center(
-            child: Text(
-              'Failed to get pokemons list. Please, check your internet connection.',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          );
+          return const FailureWidget();
         }
         return const Center(child: CircularProgressIndicator());
       },
+    );
+  }
+}
+
+class FailureWidget extends StatelessWidget {
+  const FailureWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Failed to get pokemons list. Please, check your internet connection.',
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
     );
   }
 }

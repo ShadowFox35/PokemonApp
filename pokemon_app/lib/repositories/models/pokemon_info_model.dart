@@ -1,9 +1,23 @@
+import 'package:hive/hive.dart';
+
+part 'pokemon_info_model.g.dart';
+
+@HiveType(typeId: 2)
 class PokemonInfoModel {
-  String name;
-  String img;
-  int weight;
-  int height;
-  List<String> types;
+  @HiveField(0)
+  final String name;
+
+  @HiveField(1)
+  final String img;
+
+  @HiveField(2)
+  final int weight;
+
+  @HiveField(3)
+  final int height;
+
+  @HiveField(4)
+  final List<String> types;
 
   PokemonInfoModel({
     required this.name,

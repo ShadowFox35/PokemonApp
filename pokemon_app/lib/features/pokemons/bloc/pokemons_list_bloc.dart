@@ -14,11 +14,7 @@ class PokemonsListBloc extends Bloc<PokemonsListEvent, PokemonsListState> {
         emit(PokemonsListLoading());
 
         final fetchedPokemonList =
-            await pokemonsListRep.getPokemonsList(event.offset);
-        fetchedPokemonList.results = [
-          ...event.list,
-          ...fetchedPokemonList.results
-        ];
+            await pokemonsListRep.getPokemonsList(event.offset, event.list);
 
         emit(PokemonsListLoaded(pokemonsListLoaded: fetchedPokemonList));
       } on Exception catch (error) {

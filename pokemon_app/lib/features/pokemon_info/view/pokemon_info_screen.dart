@@ -26,33 +26,51 @@ class _InfoState extends State<PokemonInfo> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _pokemonsInfoBloc.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          title: Text(widget.name!,
-              style: Theme.of(context).textTheme.headlineMedium),
-        ),
-        body: BlocBuilder<PokemonsInfoBloc, PokemonsInfoState>(
-          bloc: _pokemonsInfoBloc,
-          builder: (context, state) {
-            if (state is PokemonsInfoLoaded) {
-              return PokemonInfoContent(state: state);
-            }
-            if (state is PokemonsInfoFailure) {
-              return Center(
-                child: Text(
-                  'Failed to get data. Please, check your internet connection.',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              );
-            }
+      appBar: AppBar(
+        elevation: 0.0,
+        title: Text(widget.name!,
+            style: Theme.of(context).textTheme.headlineMedium),
+      ),
+      body: BlocBuilder<PokemonsInfoBloc, PokemonsInfoState>(
+        bloc: _pokemonsInfoBloc,
+        builder: (context, state) {
+          if (state is PokemonsInfoLoaded) {
+            return PokemonInfoContent(state: state);
+          }
+          if (state is PokemonsInfoFailure) {
+            return const FailureWidget();
+          }
 
-            return loaderWidget(context);
-          },
-        ));
+          return loaderWidget(context);
+        },
+      ),
+    );
   }
 
   Widget loaderWidget(BuildContext context) =>
       const Center(child: CircularProgressIndicator());
+}
+
+class FailureWidget extends StatelessWidget {
+  const FailureWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Failed to get pokemons list. Please, check your internet connection.',
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+    );
+  }
 }

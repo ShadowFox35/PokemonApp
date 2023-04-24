@@ -1,5 +1,13 @@
+import 'package:hive/hive.dart';
+
+part 'pokemons_list_model.g.dart';
+
+@HiveType(typeId: 3)
 class PokemonListModel {
+  @HiveField(0)
   final String name;
+
+  @HiveField(1)
   final String url;
 
   PokemonListModel({required this.name, required this.url});
@@ -12,20 +20,20 @@ class PokemonListModel {
   }
 }
 
+@HiveType(typeId: 1)
 class PokemonRequestModel {
+  @HiveField(0)
   int count;
-  String? next;
-  String? previous;
+
+  @HiveField(1)
   List<PokemonListModel> results;
 
   PokemonRequestModel(
-      {required this.count, this.next, this.previous, required this.results});
+      {required this.count, required this.results});
 
   factory PokemonRequestModel.fromJson(Map<String, dynamic> json) {
     return PokemonRequestModel(
       count: json['count'],
-      next: json['next'],
-      previous: json['previous'],
       results: (json['results'] as List<dynamic>)
           .map((pokemonJson) => PokemonListModel.fromJson(pokemonJson))
           .toList(),
