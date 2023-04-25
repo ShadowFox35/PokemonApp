@@ -10,7 +10,7 @@ Pokemon App with animations, beautiful UI and network call.
 <img src="https://user-images.githubusercontent.com/94312514/234389886-bbd2e23d-dbf8-4987-a6b8-6f1e3374fa85.png" width="300em">
 <img src="https://user-images.githubusercontent.com/94312514/234390845-491149af-582e-4288-8aed-01ec8e352e57.png" width="300em">
 <img src="https://user-images.githubusercontent.com/94312514/234390902-eeb9f197-4f2a-4de5-bbbb-beb5eec7d2c6.png" width="300em">
-<img src="(https://user-images.githubusercontent.com/94312514/234390995-179ca110-0a03-4a12-898d-f2e4ee24be70.png" width="300em">
+<img src="https://user-images.githubusercontent.com/94312514/234390995-179ca110-0a03-4a12-898d-f2e4ee24be70.png" width="300em">
 
 ## Functionality
 
