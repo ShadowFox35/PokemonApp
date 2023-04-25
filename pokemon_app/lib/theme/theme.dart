@@ -16,6 +16,6 @@ final theme = ThemeData(
             color: Color.fromRGBO(20, 96, 177, 1),
             fontWeight: FontWeight.w700),
         bodySmall: TextStyle(
-            fontFamily: 'Montserrat',
-            fontSize: 20,
+            fontFamily: 'OpenSans',
+            fontSize: 18,
             color: Color.fromRGBO(31, 104, 182, 1))));

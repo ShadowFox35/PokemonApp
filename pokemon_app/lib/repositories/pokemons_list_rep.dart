@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:pokemon_app/main.dart';
+import 'package:pokemon_app/utils/sort_function.dart';
 import 'models/models_export.dart';
 import 'abstract_pokemons_list_rep.dart';
 
-const requestTime = 10;
+const requestTime = 6;
 
 class PokemonsListRep implements AbstractPokemonsListRep {
   PokemonsListRep({required this.dio});
@@ -21,9 +22,11 @@ class PokemonsListRep implements AbstractPokemonsListRep {
         ...oldlist,
         ...pokemonRequestModel.results
       ];
+      pokemonRequestModel.results =
+          sortListByUrlNumber(pokemonRequestModel.results);
+
       pokemonBox.put('count', pokemonRequestModel.count);
       pokemonBox.put('results', pokemonRequestModel.results);
-
       return pokemonRequestModel;
     } catch (error) {
       if (!pokemonBox.containsKey('results') ||
@@ -35,6 +38,7 @@ class PokemonsListRep implements AbstractPokemonsListRep {
           .map((pokemonJson) =>
               PokemonListModel(name: pokemonJson.name, url: pokemonJson.url))
           .toList();
+      results = sortListByUrlNumber(results);
       return PokemonRequestModel(
           count: pokemonBox.get('count'), results: results);
     }
@@ -52,7 +56,6 @@ class PokemonsInfoRep implements AbstractPokemonsInfoRep {
           .get('https://pokeapi.co/api/v2/pokemon/$name')
           .timeout(const Duration(seconds: requestTime));
 
-      // if (response.statusCode == 200) {
       final pokemonRequestModel = PokemonInfoModel.fromJson(response.data);
       pokemonBox.put(name, pokemonRequestModel);
 

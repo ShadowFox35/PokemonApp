@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 
-
 class Pokemons extends StatefulWidget {
   const Pokemons({super.key});
 
@@ -19,7 +18,6 @@ class _PokemonsState extends State<Pokemons> {
         ),
         body: const Center(
             child: SizedBox(
-          width: 300,
           height: 500,
           child: PokemonsList(),
         )));

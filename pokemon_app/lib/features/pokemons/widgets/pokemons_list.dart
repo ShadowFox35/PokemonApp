@@ -4,8 +4,9 @@ import 'package:get_it/get_it.dart';
 import 'package:pokemon_app/features/pokemon_info/pokemon_info_export.dart';
 import 'package:pokemon_app/features/pokemons/bloc/pokemons_list_bloc.dart';
 import 'package:pokemon_app/features/pokemons/widgets/widgets.dart';
+import 'package:pokemon_app/main.dart';
 import 'package:pokemon_app/repositories/pokemons_rep_export.dart';
-
+import 'package:pokemon_app/features/messages/messages.dart';
 
 class PokemonsList extends StatefulWidget {
   const PokemonsList({
@@ -121,26 +122,30 @@ class _PokemonsListState extends State<PokemonsList> {
           ]);
         }
         if (state is PokemonsListFailure) {
-          return const FailureWidget();
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const ErrorMessage(),
+                TextButton(
+                  onPressed: () {
+                    List<PokemonListModel> oldList = [];
+                    if (pokemonBox.get('results').length != 0) {
+                      oldList = pokemonBox.get('results');
+                    }
+                    _pokemonsListBloc.add(LoadPokemonsList(
+                        page * itemsPerPage, oldList));
+                  },
+                  child: Text('Try again',
+                      style: Theme.of(context).textTheme.bodySmall),
+                )
+              ],
+            ),
+          );
         }
         return const Center(child: CircularProgressIndicator());
       },
-    );
-  }
-}
-
-class FailureWidget extends StatelessWidget {
-  const FailureWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Failed to get pokemons list. Please, check your internet connection.',
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+
+import 'package:pokemon_app/features/messages/messages.dart';
 import 'package:pokemon_app/repositories/pokemons_rep_export.dart';
 import '../widgets/widgets.dart';
 import '../bloc/pokemons_info_bloc.dart';
@@ -46,7 +48,24 @@ class _InfoState extends State<PokemonInfo> {
             return PokemonInfoContent(state: state);
           }
           if (state is PokemonsInfoFailure) {
-            return const FailureWidget();
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const ErrorMessage(),
+                  TextButton(
+                    onPressed: () {
+                      _pokemonsInfoBloc.add(
+                        LoadPokemonsInfo(widget.name!),
+                      );
+                    },
+                    child: Text('Try again',
+                        style: Theme.of(context).textTheme.bodySmall),
+                  )
+                ],
+              ),
+            );
           }
 
           return loaderWidget(context);
@@ -57,20 +76,4 @@ class _InfoState extends State<PokemonInfo> {
 
   Widget loaderWidget(BuildContext context) =>
       const Center(child: CircularProgressIndicator());
-}
-
-class FailureWidget extends StatelessWidget {
-  const FailureWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Failed to get pokemons list. Please, check your internet connection.',
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
-    );
-  }
 }
