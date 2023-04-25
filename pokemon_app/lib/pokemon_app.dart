@@ -12,6 +12,7 @@ class PokemonApp extends StatelessWidget {
     return MaterialApp(
       theme: theme,
       routes: routes,
+      title: 'Pokemons',
       onGenerateRoute: (settings) {
         if (settings.name?.startsWith('/pokemon_info/') == true) {
           final String? name = settings.name?.replaceAll('/pokemon_info/', '');
