@@ -60,6 +60,14 @@ class _PokemonsListState extends State<PokemonsList> {
     }
   }
 
+  void _reloadPage() {
+    List<PokemonListModel> oldList = [];
+    if (pokemonBox.get('results').length != 0) {
+      oldList = pokemonBox.get('results');
+    }
+    _pokemonsListBloc.add(LoadPokemonsList(page * itemsPerPage, oldList));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PokemonsListBloc, PokemonsListState>(
@@ -122,27 +130,7 @@ class _PokemonsListState extends State<PokemonsList> {
           ]);
         }
         if (state is PokemonsListFailure) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const ErrorMessage(),
-                TextButton(
-                  onPressed: () {
-                    List<PokemonListModel> oldList = [];
-                    if (pokemonBox.get('results').length != 0) {
-                      oldList = pokemonBox.get('results');
-                    }
-                    _pokemonsListBloc.add(LoadPokemonsList(
-                        page * itemsPerPage, oldList));
-                  },
-                  child: Text('Try again',
-                      style: Theme.of(context).textTheme.bodySmall),
-                )
-              ],
-            ),
-          );
+          return ErrorMessage(onPressedTryAgain: _reloadPage);
         }
         return const Center(child: CircularProgressIndicator());
       },

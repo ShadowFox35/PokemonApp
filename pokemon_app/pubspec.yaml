@@ -27,9 +27,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   fonts:
-    - family: Montserrat
-      fonts:
-        - asset: fonts/Montserrat-Regular.ttf
     - family: OpenSans
       fonts:
         - asset: fonts/OpenSans-Regular.ttf

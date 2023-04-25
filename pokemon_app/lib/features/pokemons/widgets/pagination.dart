@@ -29,12 +29,13 @@ class PaginationButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-            onTap: currentPage == 1 ? null : onPreviousPressed,
-            child: RotationTransition(
-              turns: const AlwaysStoppedAnimation(1 / 2),
-              child: SvgPicture.asset('assets/icons/arrow.svg',
-                  width: 50, height: 50, colorFilter: disabledPrevBtnFilter),
-            )),
+          onTap: currentPage == 1 ? null : onPreviousPressed,
+          child: RotationTransition(
+            turns: const AlwaysStoppedAnimation(1 / 2),
+            child: SvgPicture.asset('assets/icons/arrow.svg',
+                width: 50, height: 50, colorFilter: disabledPrevBtnFilter),
+          ),
+        ),
         const SizedBox(width: 15.0),
         Text(
           "${currentPage.toString()}/$pagesAmount",

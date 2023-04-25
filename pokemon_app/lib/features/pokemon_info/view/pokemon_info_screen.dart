@@ -33,6 +33,10 @@ class _InfoState extends State<PokemonInfo> {
     _pokemonsInfoBloc.close();
   }
 
+  void _reloadPage() {
+    _pokemonsInfoBloc.add(LoadPokemonsInfo(widget.name!));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,26 +52,8 @@ class _InfoState extends State<PokemonInfo> {
             return PokemonInfoContent(state: state);
           }
           if (state is PokemonsInfoFailure) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const ErrorMessage(),
-                  TextButton(
-                    onPressed: () {
-                      _pokemonsInfoBloc.add(
-                        LoadPokemonsInfo(widget.name!),
-                      );
-                    },
-                    child: Text('Try again',
-                        style: Theme.of(context).textTheme.bodySmall),
-                  )
-                ],
-              ),
-            );
+            return ErrorMessage(onPressedTryAgain: _reloadPage);
           }
-
           return loaderWidget(context);
         },
       ),
