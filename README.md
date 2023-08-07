@@ -1,9 +1,6 @@
 # Pokemon App
 Application to view pokemons using given API
 
-## Done
-25.04.2023 (deadline 26.04.2023)
-
 ## Screenshots
 
 <img src="https://user-images.githubusercontent.com/94312514/234389886-bbd2e23d-dbf8-4987-a6b8-6f1e3374fa85.png" width="300em"> <img src="https://user-images.githubusercontent.com/94312514/234390845-491149af-582e-4288-8aed-01ec8e352e57.png" width="300em">
